@@ -1,0 +1,48 @@
+table {
+     border-collapse: collapse;
+     color: #4a4a4d;
+     width: 100%;
+     font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+ th, td {
+     padding: 10px 15px;
+     vertical-align: middle;
+     text-align: center;
+}
+ thead {
+     background: #395870;
+     background: linear-gradient(#49708f, #293f50);
+     color: #fff;
+     font-size: 11px;
+     text-transform: uppercase;
+}
+ th:first-child {
+     border-top-left-radius: 5px;
+     text-align: left;
+}
+ th:last-child {
+     border-top-right-radius: 5px;
+}
+ tbody tr:nth-child(odd) {
+     background: #f0f0f2;
+}
+ td {
+     border-bottom: 1px solid #cecfd5;
+     border-right: 1px solid #cecfd5;
+}
+ td:first-child {
+     border-left: 1px solid #cecfd5;
+     text-align: left;
+}
+ .book-title {
+     color: #395870;
+     display: block;
+}
+ .text-offset {
+     color: #7c7c80;
+     font-size: 12px;
+}
+
+dt {
+  float: left;
+}

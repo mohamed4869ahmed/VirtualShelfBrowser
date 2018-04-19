@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demo">
+   <head>
+      <title>Virtual Shelf Browswe</title>
+      <link href="content/css/styles.css" rel="stylesheet" type="text/css" />
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script>
+      <script src="app/hello.js"></script>
+      <style src="css/styles.css"></style>
+   </head>
+   <body>
+      <div ng-controller="BooksController">
+         <p> {{h}} </p>
+         <table>
+            <thead>
+               <tr>
+                  <th>Book</th>
+                  <th>Library Name</th>
+                  <th>Price</th>
+                  <th>More Details</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr ng-repeat="book in books">
+                  <td>
+                     <strong class="book-title">{{book.title}}</strong>
+                     <span class="text-offset">by {{book.author}}</span>
+                  </td>
+                  <td > {{book.bookKey.libraryName}} </td>
+                  <td> {{book.price}} </td>
+                  <td><button ng-click="showBookDetails(book)">Show more details</button></td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </body>
+</html>
