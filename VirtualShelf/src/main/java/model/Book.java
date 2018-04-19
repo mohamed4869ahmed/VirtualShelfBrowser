@@ -77,7 +77,7 @@ public class Book {
     }
 
     public void setCategory(model.Category category) {
-        category = category;
+        this.category = category;
     }
 
     @Embeddable
