@@ -31,7 +31,7 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: 'r05'
     compile group: 'com.google.apis', name: 'google-api-services-books', version: 'v1-rev21-1.14.1-beta'
     compile 'mysql:mysql-connector-java'
-    compile group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.23.0'
+    compile group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.11.0-beta'
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
