@@ -1,0 +1,14 @@
+VirtualShelf/.idea/*
+VirtualShelf/.gradle/
+VirtualShelf/out/
+./VirtualShelf/build/*
+out/
+build/
+.idea/
+.gradle/
+.DS_Store
+.pdf
+.zip
+out
+build
+*.iml

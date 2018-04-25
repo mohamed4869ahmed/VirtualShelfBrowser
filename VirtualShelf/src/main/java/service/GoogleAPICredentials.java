@@ -2,7 +2,7 @@ package service;
 
 public class GoogleAPICredentials {
 
-    static final String API_KEY = "AIzaSyAwIeFinbkgYuV5oWM0WfD3sIdwuK4c5ME";
+    static final String API_KEY = null;
 
     static void errorIfNotSpecified() {
         if (API_KEY == null) {
