@@ -3,12 +3,16 @@ function showDetails(){
   document.title = book.title;
   document.getElementById('title').innerHTML = book.title;
   document.getElementById('author').innerHTML = book.author;
-  document.getElementById('year').innerHTML = book.year;
+  document.getElementById('publishDate').innerHTML = book.publishDate;
   document.getElementById('publisher').innerHTML = book.publisher;
   document.getElementById('category').innerHTML = book.category;
   document.getElementById('library').innerHTML = book.bookKey.libraryName;
   document.getElementById('price').innerHTML = book.price;
   document.getElementById('ISBN').innerHTML = book.bookKey.isbn;
+  document.getElementById('description').innerHTML = book.description;
+  document.getElementById('rating').innerHTML = book.rating;
+  document.getElementById('previewLink').href = book.previewLink;
+  document.getElementById('image').src = book.image;
 }
 
 

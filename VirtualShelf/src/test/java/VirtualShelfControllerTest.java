@@ -32,16 +32,14 @@ public class VirtualShelfControllerTest {
         this.bookRepository.deleteAllInBatch();
 
         Book.BookBuilder bookOne = new Book.BookBuilder()
-                .title("Harry Potter and the Philosophers Stone")
-                .author("J.K. Rowling")
-                .ISBN("1")
+                .ISBN("1781100217")
+                .title("Harry Potter and the Philosopher's Stone")
                 .libraryName("Mary GrandPre")
                 .price(32.74);
 
         Book.BookBuilder bookTwo = new Book.BookBuilder()
+                .ISBN("1781100500")
                 .title("Harry Potter and the Chamber of Secrets")
-                .author("J.K. Rowling")
-                .ISBN("2")
                 .libraryName("Mary GrandPre")
                 .price(7.39);
 
@@ -52,111 +50,75 @@ public class VirtualShelfControllerTest {
 
     @Test
     public void getSize() throws Exception {
-        mockMvc.perform(get("/countBooks"))
+        mockMvc.perform(get("/count-books"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("2"));
     }
 
     @Test
     public void addBook() throws Exception{
-        mockMvc.perform(post("/addBook?" +
-                "ISBN=3" +
+        mockMvc.perform(post("/add-book?" +
+                "ISBN=0545791340" +
                 "&libraryName=Mary+GrandPre" +
-                "&title=Harry+Potter+and+the+Prisoner+of+Azkaban" +
-                "&author=J.+K.+Rowling" +
                 "&price=8.59"))
                 .andExpect(status().isCreated());
     }
 
     @Test
     public void addBookAndCheckSize() throws Exception{
-        mockMvc.perform(post("/addBook?" +
-                "ISBN=3" +
+        mockMvc.perform(post("/add-book?" +
+                "ISBN=0545791340" +
                 "&libraryName=Mary+GrandPre" +
-                "&title=Harry+Potter+and+the+Prisoner+of+Azkaban" +
-                "&author=J.+K.+Rowling" +
                 "&price=8.59"))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/countBooks"))
+        mockMvc.perform(get("/count-books"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("3"));
     }
 
     @Test
     public void checkBadRequest() throws Exception{
-        mockMvc.perform(post("/addBook?" +
+        mockMvc.perform(post("/add-book?" +
                 "&libraryName=Mary+GrandPre" +
-                "&title=Harry+Potter+and+the+Prisoner+of+Azkaban" +
-                "&author=J.+K.+Rowling" +
                 "&price=8.59"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void checkBadRequestAndSize() throws Exception{
-        mockMvc.perform(post("/addBook?" +
+        mockMvc.perform(post("/add-book?" +
                 "&libraryName=Mary+GrandPre" +
-                "&title=Harry+Potter+and+the+Prisoner+of+Azkaban" +
-                "&author=J.+K.+Rowling" +
                 "&price=8.59"))
                 .andExpect(status().isBadRequest());
 
-        mockMvc.perform(get("/countBooks"))
+        mockMvc.perform(get("/count-books"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("2"));
     }
 
     @Test
-    public void checkInvalidCategory() throws Exception{
-        mockMvc.perform(post("/addBook?" +
-                "ISBN=3" +
-                "&libraryName=Mary+GrandPre" +
-                "&title=Harry+Potter+and+the+Prisoner+of+Azkaban" +
-                "&author=J.+K.+Rowling" +
-                "&price=8.59" +
-                "&category=sport"))
-                .andExpect(status().isInternalServerError());
-    }
-
-    @Test
-    public void checkValidCategory() throws Exception{
-        mockMvc.perform(post("/addBook?" +
-                "ISBN=3" +
-                "&libraryName=Mary+GrandPre" +
-                "&title=Harry+Potter+and+the+Prisoner+of+Azkaban" +
-                "&author=J.+K.+Rowling" +
-                "&price=8.59" +
-                "&category=Art"))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
     public void checkDifferentLibraryNameAndSameISBN() throws Exception{
-        mockMvc.perform(post("/addBook?" +
-                "ISBN=1" +
+        mockMvc.perform(post("/add-book?" +
+                "ISBN=0545791340" +
                 "&libraryName=Bahy" +
-                "&title=Harry+Potter+and+the+Prisoner+of+Azkaban" +
-                "&author=J.+K.+Rowling" +
                 "&price=8.59"))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/countBooks"))
+        mockMvc.perform(get("/count-books"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("3"));
     }
 
     @Test
     public void checkDifferentISBNAndSameLibraryName() throws Exception{
-        mockMvc.perform(post("/addBook?" +
-                "ISBN=4" +
+        mockMvc.perform(post("/add-book?" +
+                "ISBN=1781100527" +
                 "&libraryName=Mary+GrandPre" +
-                "&title=Harry+Potter+and+the+Prisoner+of+Azkaban" +
-                "&author=J.+K.+Rowling" +
                 "&price=8.59"))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/countBooks"))
+        mockMvc.perform(get("/count-books"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("3"));
     }

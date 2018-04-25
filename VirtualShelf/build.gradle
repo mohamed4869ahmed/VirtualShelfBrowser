@@ -29,6 +29,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile group: 'com.google.guava', name: 'guava', version: 'r05'
+    compile group: 'com.google.apis', name: 'google-api-services-books', version: 'v1-rev21-1.14.1-beta'
     compile 'mysql:mysql-connector-java'
 
     testCompile('org.springframework.boot:spring-boot-starter-test')

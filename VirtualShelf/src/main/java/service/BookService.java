@@ -1,19 +1,18 @@
 package service;
 
+import com.google.api.services.books.model.Volume;
 import model.Book;
 import model.BookRepository;
-import model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private GoogleAPIService googleAPIService;
 
     public Long size() {
         return bookRepository.count();
@@ -23,23 +22,30 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Boolean addBook(String ISBN, String libraryName, String title, String author, String publisher, Integer year, Double price, String category) {
+    public Boolean addBook(String isbn, String libraryName, Double price) {
 
-        if(category != null && !Stream.of(Category.values()).map(Category::name).collect(Collectors.toList()).contains(category)){
+        Volume.VolumeInfo volumeInfo = googleAPIService.getBookByISBN(isbn);
+
+        if (volumeInfo == null) {
             return false;
         }
 
-        Book.BookBuilder bookBuilder = new Book.BookBuilder()
-                .ISBN(ISBN)
-                .libraryName(libraryName)
-                .title(title)
-                .author(author)
-                .publisher(publisher)
-                .year(year)
+        Book book = new Book.BookBuilder()
+                .title(volumeInfo.getTitle())
+                .author(volumeInfo.getAuthors() == null? null : volumeInfo.getAuthors().get(0))
+                .category(volumeInfo.getCategories() == null? null : volumeInfo.getCategories().get(0))
+                .description(volumeInfo.getDescription())
+                .image(volumeInfo.getImageLinks().getSmallThumbnail())
+                .previewLink(volumeInfo.getPreviewLink())
+                .publishDate(volumeInfo.getPublishedDate())
+                .publisher(volumeInfo.getPublisher())
+                .rating(volumeInfo.getAverageRating())
                 .price(price)
-                .category(category);
+                .ISBN(isbn)
+                .libraryName(libraryName)
+                .build();
 
-        bookRepository.save(bookBuilder.build());
+        bookRepository.save(book);
         return true;
     }
 }

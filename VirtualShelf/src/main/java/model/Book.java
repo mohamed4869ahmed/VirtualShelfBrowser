@@ -2,7 +2,6 @@ package model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
 
 @Entity
 @Table(name = "book")
@@ -16,13 +15,20 @@ public class Book {
     private String author;
     @Column(name = "publisher")
     private String publisher;
-    @Column(name = "year")
-    private Integer year;
+    @Column(name = "publish_date")
+    private String publishDate;
+    @Column(name = "image")
+    private String image;
+    @Column(name = "description", columnDefinition = "LONGTEXT")
+    private String description;
+    @Column(name = "category")
+    private String category;
+    @Column(name = "preview_link")
+    private String previewLink;
     @Column(name = "price")
     private Double price;
-    @Column(name = "category")
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    @Column(name = "rating")
+    private Double rating;
 
     public BookKey getBookKey() {
         return bookKey;
@@ -56,14 +62,6 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
     public Double getPrice() {
         return price;
     }
@@ -72,13 +70,54 @@ public class Book {
         this.price = price;
     }
 
-    public model.Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(model.Category category) {
+    public void setCategory(String category) {
         this.category = category;
     }
+
+    public String getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(String publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPreviewLink() {
+        return previewLink;
+    }
+
+    public void setPreviewLink(String previewLink) {
+        this.previewLink = previewLink;
+    }
+
 
     @Embeddable
     public static class BookKey implements Serializable {
@@ -114,9 +153,13 @@ public class Book {
         private String title;
         private String author;
         private String publisher;
-        private Integer year;
+        private String publishDate;
+        private String category;
+        private String description;
+        private String image;
+        private String previewLink;
         private Double price;
-        private Category category;
+        private Double rating;
 
         public BookBuilder ISBN(String ISBN) {
             this.ISBN = ISBN;
@@ -143,8 +186,8 @@ public class Book {
             return this;
         }
 
-        public BookBuilder year(Integer year) {
-            this.year = year;
+        public BookBuilder publishDate(String publishDate) {
+            this.publishDate = publishDate;
             return this;
         }
 
@@ -154,8 +197,27 @@ public class Book {
         }
 
         public BookBuilder category(String category) {
-            if(category != null)
-                this.category = Category.valueOf(category);
+            this.category = category;
+            return this;
+        }
+
+        public BookBuilder rating(Double rating) {
+            this.rating = rating;
+            return this;
+        }
+
+        public BookBuilder image(String image) {
+            this.image = image;
+            return this;
+        }
+
+        public BookBuilder previewLink(String previewLink) {
+            this.previewLink = previewLink;
+            return this;
+        }
+
+        public BookBuilder description(String description) {
+            this.description = description;
             return this;
         }
 
@@ -168,9 +230,13 @@ public class Book {
             book.setTitle(title);
             book.setAuthor(author);
             book.setPublisher(publisher);
-            book.setYear(year);
+            book.setPublishDate(publishDate);
             book.setPrice(price);
             book.setCategory(category);
+            book.setRating(rating);
+            book.setImage(image);
+            book.setDescription(description);
+            book.setPreviewLink(previewLink);
             return book;
         }
     }
