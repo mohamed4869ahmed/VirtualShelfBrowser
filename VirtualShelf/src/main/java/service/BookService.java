@@ -4,6 +4,7 @@ import com.google.api.services.books.model.Volume;
 import model.Book;
 import model.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,8 +19,12 @@ public class BookService {
         return bookRepository.count();
     }
 
-    public Iterable<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public Iterable<Book> getAllBooks(String sortingAttribute, String sortingDirection) {
+        if (sortingAttribute == null) {
+            return bookRepository.findAll();
+        } else {
+            return bookRepository.findAll(new Sort(convertToSortDirection(sortingDirection), sortingAttribute));
+        }
     }
 
     public Boolean addBook(String isbn, String libraryName, Double price) {
@@ -32,12 +37,12 @@ public class BookService {
 
         Book book = new Book.BookBuilder()
                 .title(volumeInfo.getTitle())
-                .author(volumeInfo.getAuthors() == null? null : volumeInfo.getAuthors().get(0))
-                .category(volumeInfo.getCategories() == null? null : volumeInfo.getCategories().get(0))
+                .author(volumeInfo.getAuthors() == null ? null : volumeInfo.getAuthors().get(0))
+                .category(volumeInfo.getCategories() == null ? null : volumeInfo.getCategories().get(0))
                 .description(volumeInfo.getDescription())
                 .image(volumeInfo.getImageLinks().getSmallThumbnail())
                 .previewLink(volumeInfo.getPreviewLink())
-                .publishDate(volumeInfo.getPublishedDate())
+                .publicationDate(volumeInfo.getPublishedDate())
                 .publisher(volumeInfo.getPublisher())
                 .rating(volumeInfo.getAverageRating())
                 .price(price)
@@ -47,5 +52,13 @@ public class BookService {
 
         bookRepository.save(book);
         return true;
+    }
+
+    private Sort.Direction convertToSortDirection(String sortingDirection) {
+        if (sortingDirection == null || sortingDirection.equals("ASC")) {
+            return Sort.Direction.ASC;
+        } else {
+            return Sort.Direction.DESC;
+        }
     }
 }

@@ -15,8 +15,8 @@ public class Book {
     private String author;
     @Column(name = "publisher")
     private String publisher;
-    @Column(name = "publish_date")
-    private String publishDate;
+    @Column(name = "publication_date")
+    private String publicationDate;
     @Column(name = "image")
     private String image;
     @Column(name = "description", columnDefinition = "LONGTEXT")
@@ -78,12 +78,12 @@ public class Book {
         this.category = category;
     }
 
-    public String getPublishDate() {
-        return publishDate;
+    public String getPublicationDate() {
+        return publicationDate;
     }
 
-    public void setPublishDate(String publishDate) {
-        this.publishDate = publishDate;
+    public void setPublicationDate(String publicationDate) {
+        this.publicationDate = publicationDate;
     }
 
     public Double getRating() {
@@ -153,7 +153,7 @@ public class Book {
         private String title;
         private String author;
         private String publisher;
-        private String publishDate;
+        private String publicationDate;
         private String category;
         private String description;
         private String image;
@@ -186,8 +186,8 @@ public class Book {
             return this;
         }
 
-        public BookBuilder publishDate(String publishDate) {
-            this.publishDate = publishDate;
+        public BookBuilder publicationDate(String publicationDate) {
+            this.publicationDate = publicationDate;
             return this;
         }
 
@@ -230,7 +230,7 @@ public class Book {
             book.setTitle(title);
             book.setAuthor(author);
             book.setPublisher(publisher);
-            book.setPublishDate(publishDate);
+            book.setPublicationDate(publicationDate);
             book.setPrice(price);
             book.setCategory(category);
             book.setRating(rating);

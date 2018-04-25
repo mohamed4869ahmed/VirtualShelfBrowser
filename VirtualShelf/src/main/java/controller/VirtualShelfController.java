@@ -17,12 +17,13 @@ public class VirtualShelfController {
     @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @RequestMapping("/all-books")
     public @ResponseBody
-    ResponseEntity<Iterable<Book>> getBooks() {
-        Iterable<Book> books = bookService.getAllBooks();
+    ResponseEntity<Iterable<Book>> getBooks(@RequestParam(name = "sorting-attribute", required = false) String sortingAttribute,
+                                            @RequestParam(name = "sorting-direction", required = false) String sortingDirection) {
+        Iterable<Book> books = bookService.getAllBooks(sortingAttribute, sortingDirection);
         if (Iterables.size(books) == 0) {
             return new ResponseEntity<Iterable<Book>>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<Iterable<Book>>(bookService.getAllBooks(), HttpStatus.OK);
+        return new ResponseEntity<Iterable<Book>>(books, HttpStatus.OK);
     }
 
     @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
