@@ -1,7 +1,7 @@
 package controller;
 
-import Utility.BookPredicatesBuilder;
-import Utility.SearchCriteria;
+import utility.BookPredicatesBuilder;
+import utility.SearchCriteria;
 import com.google.common.collect.Iterables;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import model.Book;

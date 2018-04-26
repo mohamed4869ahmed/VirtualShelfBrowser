@@ -1,4 +1,4 @@
-package Utility;
+package utility;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 
