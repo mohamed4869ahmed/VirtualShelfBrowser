@@ -10,6 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,25 +29,30 @@ public class VirtualShelfControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
+    private Book bookOne;
+    private Book bookTwo;
+
     @Before
     public void setup() {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
         this.bookRepository.deleteAllInBatch();
 
-        Book.BookBuilder bookOne = new Book.BookBuilder()
+        this.bookOne = new Book.BookBuilder()
                 .ISBN("1781100217")
                 .title("Harry Potter and the Philosopher's Stone")
                 .libraryName("Mary GrandPre")
-                .price(5.74);
+                .price(5.74)        //Cheap Book
+                .build();
 
-        Book.BookBuilder bookTwo = new Book.BookBuilder()
+        this.bookTwo = new Book.BookBuilder()
                 .ISBN("1781100500")
                 .title("Harry Potter and the Chamber of Secrets")
                 .libraryName("Mary GrandPre")
-                .price(10.39);
+                .price(10.39)        //Expensive Book
+                .build();
 
-        bookRepository.save(bookOne.build());
-        bookRepository.save(bookTwo.build());
+        bookRepository.save(bookOne);
+        bookRepository.save(bookTwo);
 
     }
 
@@ -130,16 +136,27 @@ public class VirtualShelfControllerTest {
         mockMvc.perform(post("/all-books?" +
                 "sorting-attribute=price" +
                 "&sorting-direction=DESC"))
-                .andExpect(jsonPath("$[0].bookKey.isbn", is("1781100500")));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].bookKey.isbn", is(bookTwo.getBookKey().getISBN())));
 
     }
 
     @Test
     public void checkTitleASCCSorting() throws Exception {
         mockMvc.perform(post("/all-books?" +
-                "sorting-attribute=title" +
+                "sorting-attribute=price" +
                 "&sorting-direction=ASC"))
-                .andExpect(jsonPath("$[0].bookKey.isbn", is("1781100500")));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].bookKey.isbn", is(bookOne.getBookKey().getISBN())));
+
+    }
+
+    @Test
+    public void filterByPrice() throws Exception {
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=price:5.74"))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].bookKey.isbn", is(bookOne.getBookKey().getISBN())));
 
     }
 

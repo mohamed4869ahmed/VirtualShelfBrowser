@@ -1,6 +1,7 @@
 package service;
 
 import com.google.api.services.books.model.Volume;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import model.Book;
 import model.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,17 @@ public class BookService {
         return bookRepository.count();
     }
 
-    public Iterable<Book> getAllBooks(String sortingAttribute, String sortingDirection) {
-        if (sortingAttribute == null) {
+    public Iterable<Book> getAllBooks(String sortingAttribute, String sortingDirection, BooleanExpression booleanExpression) {
+        if (sortingAttribute == null && booleanExpression == null) {
             return bookRepository.findAll();
-        } else {
+        } else if ( booleanExpression == null) {
             return bookRepository.findAll(new Sort(convertToSortDirection(sortingDirection), sortingAttribute));
+        }  else if ( sortingAttribute == null){
+            return bookRepository.findAll(booleanExpression);
+        }
+        else {
+            return bookRepository.findAll(booleanExpression
+                    ,new Sort(convertToSortDirection(sortingDirection), sortingAttribute));
         }
     }
 

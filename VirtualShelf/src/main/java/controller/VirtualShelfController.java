@@ -1,12 +1,18 @@
 package controller;
 
+import Utility.BookPredicatesBuilder;
+import Utility.SearchCriteria;
 import com.google.common.collect.Iterables;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.BookService;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 public class VirtualShelfController {
@@ -18,8 +24,25 @@ public class VirtualShelfController {
     @RequestMapping("/all-books")
     public @ResponseBody
     ResponseEntity<Iterable<Book>> getBooks(@RequestParam(name = "sorting-attribute", required = false) String sortingAttribute,
-                                            @RequestParam(name = "sorting-direction", required = false) String sortingDirection) {
-        Iterable<Book> books = bookService.getAllBooks(sortingAttribute, sortingDirection);
+                                            @RequestParam(name = "sorting-direction", required = false) String sortingDirection,
+                                            @RequestParam(name = "filter-query", required = false) String searchCriteria
+                                            ) {
+        BooleanExpression exp = null;
+
+        if (searchCriteria != null && !searchCriteria.isEmpty() ) {
+            BookPredicatesBuilder builder = new BookPredicatesBuilder();
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+            Matcher matcher = pattern.matcher(searchCriteria + ",");
+            while (matcher.find()) {
+                builder.with(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+            }
+            exp = builder.build();
+            if(exp == null){
+                return new ResponseEntity<Iterable<Book>>(HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        Iterable<Book> books = bookService.getAllBooks(sortingAttribute, sortingDirection, exp);
         if (Iterables.size(books) == 0) {
             return new ResponseEntity<Iterable<Book>>(HttpStatus.NO_CONTENT);
         }
