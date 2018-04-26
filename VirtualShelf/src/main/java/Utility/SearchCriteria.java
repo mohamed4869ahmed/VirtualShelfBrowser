@@ -6,7 +6,7 @@ public class SearchCriteria {
     private String operation;
     private String value;
 
-    public SearchCriteria(String key, String operation, String value){
+    public SearchCriteria(String key, String operation, String value) {
         this.key = key;
         this.operation = operation;
         this.value = value;
@@ -24,8 +24,8 @@ public class SearchCriteria {
         return value;
     }
 
-    public boolean isDouble(){
-        if (key.equals("price") || key.equals("rating")){
+    public boolean isDouble() {
+        if (key.equals("price") || key.equals("rating")) {
             return true;
         }
         return false;

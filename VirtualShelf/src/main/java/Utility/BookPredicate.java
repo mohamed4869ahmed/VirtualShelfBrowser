@@ -14,20 +14,20 @@ public class BookPredicate {
         this.criteria = searchCriteria;
     }
 
-    public BooleanExpression getPredicate(){
+    public BooleanExpression getPredicate() {
         PathBuilder<Book> pathBuilder = new PathBuilder<Book>(Book.class, "book");
-        if(criteria.isDouble()){
+        if (criteria.isDouble()) {
             NumberPath<Double> path = pathBuilder.getNumber(criteria.getKey(), Double.class);
             double value = Double.parseDouble(criteria.getValue().toString());
             switch (criteria.getOperation()) {
                 case ":":
                     return path.eq(value);
                 case ">":
-                    return path.goe(value);
+                    return path.gt(value);
                 case "<":
-                    return path.loe(value);
+                    return path.lt(value);
             }
-        } else{
+        } else {
             StringPath path = pathBuilder.getString(criteria.getKey());
             if (criteria.getOperation().equalsIgnoreCase(":")) {
                 return path.containsIgnoreCase(criteria.getValue().toString());

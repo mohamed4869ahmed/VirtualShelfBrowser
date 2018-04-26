@@ -160,4 +160,71 @@ public class VirtualShelfControllerTest {
 
     }
 
+    @Test
+    public void filterByPriceGreaterThan() throws Exception {
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=price>5.74"))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].bookKey.isbn", is(bookTwo.getBookKey().getISBN())));
+    }
+
+    @Test
+    public void filterByPriceLessThan() throws Exception {
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=price<5.74"))
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    public void filterBadRequest() throws Exception {
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=price"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void filterByISBN() throws Exception {
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=bookKey.ISBN:1781100217"))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].bookKey.isbn", is(bookOne.getBookKey().getISBN())));
+    }
+
+    @Test
+    public void filterByLibraryNameANDPrice() throws Exception {
+        mockMvc.perform(post("/add-book?" +
+                "ISBN=1781100527" +
+                "&libraryName=Bahy" +
+                "&price=5.74"))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=price:5.74,bookKey.libraryName:Bahy"))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].bookKey.isbn", is("1781100527")));
+    }
+
+    @Test
+    public void filterByPriceAndSortByLibraryName() throws Exception {
+        mockMvc.perform(post("/add-book?" +
+                "ISBN=1781100527" +
+                "&libraryName=Bahy" +
+                "&price=5.74"))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=price:5.74" +
+                "&sorting-attribute=bookKey.libraryName" +
+                "&sorting-direction=ASC"))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].bookKey.libraryName", is("Bahy")))
+                .andExpect(jsonPath("$[0].bookKey.isbn", is("1781100527")))
+                .andExpect(jsonPath("$[1].bookKey.libraryName", is("Mary GrandPre")))
+                .andExpect(jsonPath("$[1].bookKey.isbn", is("1781100217")));
+    }
+
+
+
+
+
 }

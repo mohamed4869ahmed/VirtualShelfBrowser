@@ -23,14 +23,13 @@ public class BookService {
     public Iterable<Book> getAllBooks(String sortingAttribute, String sortingDirection, BooleanExpression booleanExpression) {
         if (sortingAttribute == null && booleanExpression == null) {
             return bookRepository.findAll();
-        } else if ( booleanExpression == null) {
+        } else if (booleanExpression == null) {
             return bookRepository.findAll(new Sort(convertToSortDirection(sortingDirection), sortingAttribute));
-        }  else if ( sortingAttribute == null){
+        } else if (sortingAttribute == null) {
             return bookRepository.findAll(booleanExpression);
-        }
-        else {
+        } else {
             return bookRepository.findAll(booleanExpression
-                    ,new Sort(convertToSortDirection(sortingDirection), sortingAttribute));
+                    , new Sort(convertToSortDirection(sortingDirection), sortingAttribute));
         }
     }
 
