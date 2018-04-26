@@ -32,6 +32,10 @@ dependencies {
     compile group: 'com.google.apis', name: 'google-api-services-books', version: 'v1-rev21-1.14.1-beta'
     compile 'mysql:mysql-connector-java'
     compile group: 'com.google.http-client', name: 'google-http-client-jackson2', version: '1.11.0-beta'
+    compile group: 'com.querydsl', name: 'querydsl-apt', version: '4.1.4'
+    compile group: 'com.querydsl', name: 'querydsl-jpa', version: '4.1.3'
+    compile('com.querydsl:querydsl-apt:4.0.7:jpa')
+
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
