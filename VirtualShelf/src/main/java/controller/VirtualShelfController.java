@@ -1,7 +1,5 @@
 package controller;
 
-import utility.BookPredicatesBuilder;
-import utility.SearchCriteria;
 import com.google.common.collect.Iterables;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import model.Book;
@@ -10,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.BookService;
+import utility.BookPredicatesBuilder;
+import utility.SearchCriteria;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
