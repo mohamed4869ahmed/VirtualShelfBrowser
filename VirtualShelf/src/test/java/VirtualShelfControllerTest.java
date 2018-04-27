@@ -142,12 +142,22 @@ public class VirtualShelfControllerTest {
     }
 
     @Test
-    public void checkTitleASCCSorting() throws Exception {
+    public void checkPriceASCCSorting() throws Exception {
         mockMvc.perform(post("/all-books?" +
                 "sorting-attribute=price" +
                 "&sorting-direction=ASC"))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].bookKey.isbn", is(bookOne.getBookKey().getISBN())));
+
+    }
+    
+    @Test
+    public void checkTitleASCCSorting() throws Exception {
+        mockMvc.perform(post("/all-books?" +
+                "sorting-attribute=title" +
+                "&sorting-direction=ASC"))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].bookKey.isbn", is(bookTwo.getBookKey().getISBN())));
 
     }
 
@@ -176,9 +186,16 @@ public class VirtualShelfControllerTest {
     }
 
     @Test
-    public void filterBadRequest() throws Exception {
+    public void filterEmptyPriceBadRequest() throws Exception {
         mockMvc.perform(post("/all-books?" +
                 "filter-query=price"))
+                .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    public void filterInvalidPriceBadRequest() throws Exception {
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=price:string"))
                 .andExpect(status().isBadRequest());
     }
 
