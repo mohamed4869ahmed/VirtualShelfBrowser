@@ -18,7 +18,12 @@ public class BookPredicate {
         PathBuilder<Book> pathBuilder = new PathBuilder<Book>(Book.class, "book");
         if (criteria.isDouble()) {
             NumberPath<Double> path = pathBuilder.getNumber(criteria.getKey(), Double.class);
-            double value = Double.parseDouble(criteria.getValue().toString());
+            double value;
+            try {
+                value = Double.parseDouble(criteria.getValue());
+            } catch (NumberFormatException e) {
+               return null;
+            }
             switch (criteria.getOperation()) {
                 case ":":
                     return path.eq(value);
