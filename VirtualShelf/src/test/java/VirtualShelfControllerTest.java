@@ -73,6 +73,15 @@ public class VirtualShelfControllerTest {
     }
 
     @Test
+    public void addBookWithInvalidISBN() throws Exception {
+        mockMvc.perform(post("/add-book?" +
+                "ISBN=1" +
+                "&libraryName=Mary+GrandPre" +
+                "&price=8.59"))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
     public void addBookAndCheckSize() throws Exception {
         mockMvc.perform(post("/add-book?" +
                 "ISBN=0545791340" +
