@@ -198,6 +198,13 @@ public class VirtualShelfControllerTest {
                 "filter-query=price:string"))
                 .andExpect(status().isBadRequest());
     }
+    
+    @Test
+    public void filterInvalidTitleBadRequest() throws Exception {
+        mockMvc.perform(post("/all-books?" +
+                "filter-query=title<8"))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     public void filterByISBN() throws Exception {
