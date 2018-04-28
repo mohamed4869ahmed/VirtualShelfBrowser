@@ -22,15 +22,15 @@ public class BookPredicate {
             try {
                 value = Double.parseDouble(criteria.getValue());
             } catch (NumberFormatException e) {
-               return null;
+                return null;
             }
             switch (criteria.getOperation()) {
                 case ":":
                     return path.eq(value);
                 case ">":
-                    return path.gt(value);
+                    return path.goe(value);
                 case "<":
-                    return path.lt(value);
+                    return path.loe(value);
             }
         } else {
             StringPath path = pathBuilder.getString(criteria.getKey());

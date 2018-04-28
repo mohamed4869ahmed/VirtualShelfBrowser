@@ -30,17 +30,14 @@ public class VirtualShelfController {
         BooleanExpression exp = null;
 
         if (searchCriteria != null && !searchCriteria.isEmpty()) {
-            System.out.println(searchCriteria);
             BookPredicatesBuilder builder = new BookPredicatesBuilder();
             Pattern pattern = Pattern.compile("([\\w|.]+?)(:|<|>)([\\w|.]+?),");
             Matcher matcher = pattern.matcher(searchCriteria + ",");
             while (matcher.find()) {
-                System.out.println("Hi" + matcher.group(1) + matcher.group(2) + matcher.group(3));
                 builder.with(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
             }
             exp = builder.build();
             if (exp == null) {
-                System.out.println("Null");
                 return new ResponseEntity<Iterable<Book>>(HttpStatus.BAD_REQUEST);
             }
         }
