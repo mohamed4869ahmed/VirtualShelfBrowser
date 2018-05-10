@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demo">
+
+<head>
+  <title>Virtual Shelf Browser</title>
+  <link rel="stylesheet" type="text/css" href="https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css" />
+  <link href="content/css/styles.css" rel="stylesheet" type="text/css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+  <script src="https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js"></script>
+  <script src="app/hello.js"></script>
+</head>
+
+<body>
+  <div ng-controller="BooksController">
+    <div class="wrapper">
+      <div class="box">
+        <form class="custom-dropdown">
+          <select ng-change="update()" ng-model="sorting_attribute">
+                     <option value="title">Title</option>
+                     <option value="price">Price</option>
+                     <option value="rating">Rating</option>
+                     <option value="publicationDate">Publication Date</option>
+                  </select>
+        </form>
+        <br>
+        <label class="container">
+               <input ng-model="sorting_direction" ng-change="update()" type="radio" name="direction" value="ASC">
+               <span class="checkmark"></span>
+               Ascending
+               </label>
+        <br>
+        <label class="container">
+               <input ng-model="sorting_direction" ng-change="update()" type="radio" name="direction" value="DESC">
+               <span class="checkmark"></span>
+               Descending
+               </label>
+        <h3>Rate Filter:</h3>
+        <rzslider ng-change="update()" rz-slider-model="ratingSlider.minValue" rz-slider-high="ratingSlider.maxValue" rz-slider-options="ratingSlider.options"></rzslider>
+        <h3>Price Filter:</h3>
+        <rzslider ng-change="update()" rz-slider-model="priceSlider.minValue" rz-slider-high="priceSlider.maxValue" rz-slider-options="priceSlider.options"></rzslider>
+      </div>
+      <div class="box">
+        <table>
+          <thead>
+            <tr>
+              <th>Book</th>
+              <th>Library Name</th>
+              <th>Price</th>
+              <th>Rating</th>
+              <th>Publication Date</th>
+              <th>More Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="book in books">
+              <td>
+                <strong class="book-title">{{book.title}}</strong>
+                <span class="text-offset">by {{book.author}}</span>
+              </td>
+              <td> {{book.bookKey.libraryName}} </td>
+              <td> {{book.price}} </td>
+              <td> {{book.rating}} </td>
+              <td> {{book.publicationDate}} </td>
+              <td>
+                <button ng-click="showBookDetails(book)">Show more details</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

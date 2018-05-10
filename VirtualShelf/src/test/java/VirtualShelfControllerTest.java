@@ -138,6 +138,24 @@ public class VirtualShelfControllerTest {
     }
 
     @Test
+    public void removeBookWithValidISBN() throws Exception {
+        mockMvc.perform(post("/remove-book?" +
+                "ISBN=1781100217")
+                .content(this.json(userOne))
+                .contentType(contentType))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void removeBookThatBelongsToDifferentUser() throws Exception {
+        mockMvc.perform(post("/remove-book?" +
+                "ISBN=1781100217")
+                .content(this.json(userTwo))
+                .contentType(contentType))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void checkBadRequest() throws Exception {
         mockMvc.perform(post("/add-book?" +
                 "&price=8.59")
@@ -322,6 +340,30 @@ public class VirtualShelfControllerTest {
     }
 
     @Test
+    public void addUserWithNoPasswordReturnsBadRequest() throws Exception {
+        mockMvc.perform(post("/add-user")
+                .content(this.json(new User("ElRakad", null, "ElRakad's Book Store")))
+                .contentType(contentType))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void addUserWithSameLibraryNameReturnsConflict() throws Exception {
+        mockMvc.perform(post("/add-user")
+                .content(this.json(new User("ElRakad", "123", "Mary GrandPre")))
+                .contentType(contentType))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void addUserWithNoLibraryNameReturnsBadRequest() throws Exception {
+        mockMvc.perform(post("/add-user")
+                .content(this.json(new User("ElRakad", "123456", null)))
+                .contentType(contentType))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void authenticateValidUserReturnsOK() throws Exception {
         mockMvc.perform(post("/authenticate")
                 .content(this.json(new User("Bahy", "123456", null)))
@@ -349,7 +391,6 @@ public class VirtualShelfControllerTest {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
         this.mappingJackson2HttpMessageConverter.write(
                 o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
-        System.out.println(mockHttpOutputMessage.getBodyAsString());
         return mockHttpOutputMessage.getBodyAsString();
     }
 

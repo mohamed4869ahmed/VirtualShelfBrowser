@@ -60,11 +60,19 @@ public class BookService {
         return true;
     }
 
+    public void removeBook(String isbn, String libraryName) {
+        bookRepository.deleteById(new Book.BookKey(isbn, libraryName));
+    }
+
     private Sort.Direction convertToSortDirection(String sortingDirection) {
         if (sortingDirection == null || sortingDirection.equals("ASC")) {
             return Sort.Direction.ASC;
         } else {
             return Sort.Direction.DESC;
         }
+    }
+
+    public boolean exist(String isbn, String libraryName) {
+        return bookRepository.findById(new Book.BookKey(isbn, libraryName)).map(u -> true).orElse(false);
     }
 }

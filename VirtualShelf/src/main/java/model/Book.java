@@ -129,6 +129,14 @@ public class Book {
         @Column(name = "library_name", nullable = false)
         private String libraryName;
 
+        public BookKey() {
+        }
+
+        public BookKey(String ISBN, String libraryName) {
+            this.ISBN = ISBN;
+            this.libraryName = libraryName;
+        }
+
         public String getISBN() {
             return ISBN;
         }

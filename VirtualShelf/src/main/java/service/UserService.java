@@ -13,8 +13,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean checkIfExists(String username) {
-        return userRepository.findById(username).isPresent();
+    public boolean checkIfExists(User user) {
+        return userRepository.findById(user.getUsername()).isPresent();
+    }
+
+    public boolean checkIfLibraryNameExists(User user) {
+        return userRepository.findByLibraryName(user.getLibraryName()).isPresent();
     }
 
     public boolean authenticate(User user) {
@@ -24,6 +28,10 @@ public class UserService {
 
     public void addUser(User user) {
         userRepository.save(user);
+    }
+
+    public String getLibraryName(User user){
+        return userRepository.findById(user.getUsername()).map(u -> u.getLibraryName()).orElse(null);
     }
 
 

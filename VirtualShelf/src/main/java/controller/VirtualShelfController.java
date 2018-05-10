@@ -2,6 +2,7 @@ package controller;
 
 import com.google.common.collect.Iterables;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.sun.tools.classfile.Synthetic_attribute;
 import model.Book;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +75,7 @@ public class VirtualShelfController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        Boolean done = bookService.addBook(ISBN, user.getLibraryName(), price);
+        Boolean done = bookService.addBook(ISBN, userService.getLibraryName(user), price);
         if (done) {
             return new ResponseEntity(HttpStatus.CREATED);
         } else {
@@ -83,11 +84,29 @@ public class VirtualShelfController {
     }
 
     @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
+    @RequestMapping(value = "/remove-book", method = POST)
+    public @ResponseBody
+    ResponseEntity removeBook(@RequestParam(name = "ISBN") String ISBN,
+                           @RequestBody User user) {
+
+        if (!userService.authenticate(user) || !bookService.exist(ISBN, userService.getLibraryName(user))) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        bookService.removeBook(ISBN, userService.getLibraryName(user));
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @RequestMapping(value = "/add-user", method = POST)
     public @ResponseBody
     ResponseEntity addUser(@RequestBody User user) {
-        if (userService.checkIfExists(user.getUsername())) {
+        if (userService.checkIfExists(user) || userService.checkIfLibraryNameExists(user)) {
             return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+
+        if(user.getPassword() == null|| user.getLibraryName() == null){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         userService.addUser(user);
@@ -98,7 +117,7 @@ public class VirtualShelfController {
     @RequestMapping(value = "/authenticate", method = POST)
     public @ResponseBody
     ResponseEntity authenticate(@RequestBody User user) {
-        if (!userService.checkIfExists(user.getUsername())) {
+        if (!userService.checkIfExists(user)) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
