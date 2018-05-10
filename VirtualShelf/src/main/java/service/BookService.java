@@ -1,6 +1,7 @@
 package service;
 
 import com.google.api.services.books.model.Volume;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import model.Book;
 import model.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,16 @@ public class BookService {
         return bookRepository.count();
     }
 
-    public Iterable<Book> getAllBooks(String sortingAttribute, String sortingDirection) {
-        if (sortingAttribute == null) {
+    public Iterable<Book> getAllBooks(String sortingAttribute, String sortingDirection, BooleanExpression booleanExpression) {
+        if (sortingAttribute == null && booleanExpression == null) {
             return bookRepository.findAll();
-        } else {
+        } else if (booleanExpression == null) {
             return bookRepository.findAll(new Sort(convertToSortDirection(sortingDirection), sortingAttribute));
+        } else if (sortingAttribute == null) {
+            return bookRepository.findAll(booleanExpression);
+        } else {
+            return bookRepository.findAll(booleanExpression
+                    , new Sort(convertToSortDirection(sortingDirection), sortingAttribute));
         }
     }
 
@@ -54,11 +60,19 @@ public class BookService {
         return true;
     }
 
+    public void removeBook(String isbn, String libraryName) {
+        bookRepository.deleteById(new Book.BookKey(isbn, libraryName));
+    }
+
     private Sort.Direction convertToSortDirection(String sortingDirection) {
         if (sortingDirection == null || sortingDirection.equals("ASC")) {
             return Sort.Direction.ASC;
         } else {
             return Sort.Direction.DESC;
         }
+    }
+
+    public boolean exist(String isbn, String libraryName) {
+        return bookRepository.findById(new Book.BookKey(isbn, libraryName)).map(u -> true).orElse(false);
     }
 }

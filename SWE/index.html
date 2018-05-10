@@ -2,54 +2,61 @@
 <html lang="en" ng-app="demo">
 
 <head>
-    <title>Virtual Shelf Browswe</title>
-    <link href="content/css/styles.css" rel="stylesheet" type="text/css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js"></script>
-    <script src="app/hello.js"></script>
-    <style src="css/styles.css"></style>
+  <title>Virtual Shelf Browser</title>
+  <link rel="stylesheet" type="text/css" href="https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css" />
+  <link href="content/css/index-styles.css" rel="stylesheet" type="text/css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+  <script src="https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js"></script>
+  <script src="app/hello.js"></script>
 </head>
 
 <body>
-    <div ng-controller="BooksController">
-        <form action="/action_page.php">
-            <select ng-change="update()" ng-model="sorting_attribute">
-                <option value="title">Title</option>
-                <option value="price">Price</option>
-                <option value="rating">Rating</option>
-                <option value="publicationDate">Publication Date</option>
-            </select>
-            <input ng-model="sorting_direction" ng-change="update()" type="radio" name="direction" value="ASC"> Ascending
-            <input ng-model="sorting_direction" ng-change="update()" type="radio" name="direction" value="DESC"> descending
-        </form>
-        <br>
-        <table>
-            <thead>
-                <tr>
-                    <th>Book</th>
-                    <th>Library Name</th>
-                    <th>Price</th>
-                    <th>Rating</th>
-                    <th>Publication Date</th>
-                    <th>More Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="book in books">
-                    <td>
-                        <strong class="book-title">{{book.title}}</strong>
-                        <span class="text-offset">by {{book.author}}</span>
-                    </td>
-                    <td> {{book.bookKey.libraryName}} </td>
-                    <td> {{book.price}} </td>
-                    <td> {{book.rating}} </td>
-                    <td> {{book.publicationDate}} </td>
-                    <td>
-                        <button ng-click="showBookDetails(book)">Show more details</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</body>
+  <div ng-controller="IndexController">
 
-</html>
+    <div ng-show="signUpFlag" class="modal">
+      <form class="modal-content">
+        <div class="container">
+          <h1>Sign Up</h1>
+          <p>Please fill in this form to create an account.</p>
+          <hr>
+          <label><b>Username</b></label>
+          <input ng-model="sign_up_username" type="text" placeholder="Enter username" name="username" required>
+          <label><b>Password</b></label>
+          <input ng-model="sign_up_password" type="password" placeholder="Enter Password" name="password" required>
+          <label><b>Library Name</b></label>
+          <input ng-model="sign_up_library_name" type="text" placeholder="Enter Library Name" name="libraryName" required>
+          <div class="clearfix">
+            <button ng-click="signUp()" class="signupbtn">Submit</button>
+          </div>
+          <div class="clearfix">
+            <button class="otherOption" ng-click="guest()">Continue As A Guest</button>
+            <button class="otherOption" ng-click="signInFlag=true; signUpFlag=false">Sign In</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div ng-show="signInFlag" class="modal">
+      <form class="modal-content">
+        <div class="container">
+          <h1>Sign In</h1>
+          <p>Please fill in this form to sign in.</p>
+          <hr>
+          <label><b>Username</b></label>
+          <input ng-model="sign_in_username" type="text" placeholder="Enter username" name="username" required>
+          <label><b>Password</b></label>
+          <input ng-model="sign_in_password" type="password" placeholder="Enter Password" name="password" required>
+          <div class="clearfix">
+            <button ng-click="signIn()" class="signinbtn">Submit</button>
+          </div>
+          <div class="clearfix">
+            <button class="otherOption" ng-click="guest()">Continue As A Guest</button>
+            <button class="otherOption" ng-click="signUpFlag=true; signInFlag=false">Sign Up</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</head>

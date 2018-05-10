@@ -1,5 +1,5 @@
-out
-build
+out/
+build/
 .idea
 .gradle
 .DS_Store
@@ -7,3 +7,4 @@ out
 build
 *.iml
 GoogleAPICredentials.java
+genertaed/
