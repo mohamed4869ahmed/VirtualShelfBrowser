@@ -2,7 +2,6 @@ package controller;
 
 import com.google.common.collect.Iterables;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.sun.tools.classfile.Synthetic_attribute;
 import model.Book;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +35,16 @@ public class VirtualShelfController {
                                             @RequestParam(name = "filter-query", required = false) String searchCriteria
     ) {
         BooleanExpression exp = null;
-
         if (searchCriteria != null && !searchCriteria.isEmpty()) {
             BookPredicatesBuilder builder = new BookPredicatesBuilder();
-            Pattern pattern = Pattern.compile("([\\w|.]+?)(:|<|>)([\\w|.]+?),");
+            Pattern pattern = Pattern.compile("([\\w|.]+?)(:|<|>)([\\w|.| ]+?),");
             Matcher matcher = pattern.matcher(searchCriteria + ",");
             while (matcher.find()) {
                 builder.with(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
             }
             exp = builder.build();
             if (exp == null) {
-                return new ResponseEntity<Iterable<Book>>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -87,7 +85,7 @@ public class VirtualShelfController {
     @RequestMapping(value = "/remove-book", method = POST)
     public @ResponseBody
     ResponseEntity removeBook(@RequestParam(name = "ISBN") String ISBN,
-                           @RequestBody User user) {
+                              @RequestBody User user) {
 
         if (!userService.authenticate(user) || !bookService.exist(ISBN, userService.getLibraryName(user))) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -105,7 +103,7 @@ public class VirtualShelfController {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
 
-        if(user.getPassword() == null|| user.getLibraryName() == null){
+        if (user.getPassword() == null || user.getLibraryName() == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
@@ -116,15 +114,16 @@ public class VirtualShelfController {
     @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @RequestMapping(value = "/authenticate", method = POST)
     public @ResponseBody
-    ResponseEntity authenticate(@RequestBody User user) {
+    ResponseEntity<User> authenticate(@RequestBody User user) {
         if (!userService.checkIfExists(user)) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         if (userService.authenticate(user)) {
-            return new ResponseEntity(HttpStatus.OK);
+            user.setLibraryName(userService.getLibraryName(user));
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

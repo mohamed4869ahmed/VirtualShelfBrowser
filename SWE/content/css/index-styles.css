@@ -108,8 +108,11 @@ hr {
   margin-bottom: 25px;
 }
 
-/* The Close Button (x) */
+.error_message {
+  color: #FF0000;
+}
 
+/* The Close Button (x) */
 .close {
   position: absolute;
   right: 35px;

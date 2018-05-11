@@ -30,7 +30,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public String getLibraryName(User user){
+    public String getLibraryName(User user) {
         return userRepository.findById(user.getUsername()).map(u -> u.getLibraryName()).orElse(null);
     }
 

@@ -23,13 +23,13 @@
           <label><b>Book</b></label>
           <input ng-model="isbn" type="text" placeholder="Enter ISBN" required>
           <label><b>Price</b></label>
-          <input ng-model="price" type="text" placeholder="Enter Price" required>
+          <input ng-model="price" type="text" placeholder="Enter Price">
           <div class="clearfix">
             <button ng-click="form.$valid && addBook()" class="addBook">Add Book</button>
             <button ng-click="form.$valid && removeBook()" class="removeBook">Remove Book</button>
           </div>
           <div class="clearfix">
-            <button class="otherOption2" ng-click="guest()">Continue As A Guest</button>
+            <button class="otherOption2" ng-click="guest()">View Books</button>
           </div>
         </div>
       </form>

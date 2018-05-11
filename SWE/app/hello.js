@@ -2,6 +2,7 @@ var demoApp = angular.module('demo', ['rzModule'])
 
 demoApp.controller('IndexController', function($scope, $http) {
 
+  localStorage.setItem("libraryNameQuery", "");
   $scope.signUpFlag = false;
   $scope.signInFlag = true;
 
@@ -10,6 +11,7 @@ demoApp.controller('IndexController', function($scope, $http) {
   };
 
   $scope.signUp = function() {
+    $scope.signUpError = "";
     var data = {
       "username": $scope.sign_up_username,
       "password": $scope.sign_up_password,
@@ -23,19 +25,22 @@ demoApp.controller('IndexController', function($scope, $http) {
         }
       )
       .success(function(response) {
+        var query = ",bookKey.libraryName:" + $scope.sign_up_library_name;
+        localStorage.setItem("libraryNameQuery", query);
         localStorage.setItem("username", $scope.sign_up_username);
         localStorage.setItem("password", $scope.sign_up_password);
         window.location = "./book-store.html";
       }).error(function(status) {
         if (status == 400) {
-          alert("Use valid password.");
+          $scope.signUpError = "Use valid password.";
         } else {
-          alert("Username is already used.")
+          $scope.signUpError = "Username is already used.";
         }
       });
   };
 
   $scope.signIn = function() {
+    $scope.signInError = "";
     var data = {
       "username": $scope.sign_in_username,
       "password": $scope.sign_in_password
@@ -47,15 +52,17 @@ demoApp.controller('IndexController', function($scope, $http) {
           }
         }
       )
-      .success(function(response) {
+      .success(function(data, status, headers, config) {
+        var query = ",bookKey.libraryName:" + data.libraryName;
+        localStorage.setItem("libraryNameQuery", query);
         localStorage.setItem("username", $scope.sign_in_username);
         localStorage.setItem("password", $scope.sign_in_password);
         window.location = "./book-store.html";
       }).error(function(data, status, headers, config) {
         if (status == 404) {
-          alert("User not found.");
+          $scope.signInError = "Username is not found.";
         } else {
-          alert("Incorrect Password.")
+          $scope.signInError = "Incorrect Password.";
         }
       });
   };
@@ -163,7 +170,8 @@ demoApp.controller('BooksController', function($scope, $http) {
       ',rating<' +
       $scope.ratingSlider.maxValue +
       ',rating>' +
-      $scope.ratingSlider.minValue
+      $scope.ratingSlider.minValue +
+      localStorage.getItem("libraryNameQuery")
     ).
     then(function(response) {
       $scope.books = response.data;

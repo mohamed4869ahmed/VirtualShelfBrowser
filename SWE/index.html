@@ -20,11 +20,12 @@
           <p>Please fill in this form to create an account.</p>
           <hr>
           <label><b>Username</b></label>
-          <input ng-model="sign_up_username" type="text" placeholder="Enter username" name="username" required>
+          <input ng-model="sign_up_username" type="text" pattern="(^[A-Za-z0-9]+[_\-A-Za-z0-9]*$)" placeholder="Enter username" name="username" required>
           <label><b>Password</b></label>
-          <input ng-model="sign_up_password" type="password" placeholder="Enter Password" name="password" required>
+          <input ng-model="sign_up_password" type="password" pattern=".{6,}" placeholder="Enter Password" name="password" required>
           <label><b>Library Name</b></label>
           <input ng-model="sign_up_library_name" type="text" placeholder="Enter Library Name" name="libraryName" required>
+          <label class="error_message">{{signUpError}}</label>
           <div class="clearfix">
             <button ng-click="sign_in_form.$valid && signUp()" class="signupbtn">Submit</button>
           </div>
@@ -46,6 +47,7 @@
           <input ng-model="sign_in_username" type="text" placeholder="Enter username" name="username" required>
           <label><b>Password</b></label>
           <input ng-model="sign_in_password" type="password" placeholder="Enter Password" name="password" required>
+          <label class="error_message">{{signInError}}</label>
           <div class="clearfix">
             <button ng-click="sign_up_form.$valid && signIn()" class="signinbtn">Submit</button>
           </div>

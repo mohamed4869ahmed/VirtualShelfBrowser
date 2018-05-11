@@ -35,7 +35,7 @@ public class BookPredicate {
         } else {
             StringPath path = pathBuilder.getString(criteria.getKey());
             if (criteria.getOperation().equalsIgnoreCase(":")) {
-                return path.containsIgnoreCase(criteria.getValue().toString());
+                return path.equalsIgnoreCase(criteria.getValue());
             }
         }
         return null;
