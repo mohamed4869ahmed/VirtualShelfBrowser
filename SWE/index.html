@@ -14,7 +14,7 @@
   <div ng-controller="IndexController">
 
     <div ng-show="signUpFlag" class="modal">
-      <form class="modal-content">
+      <form name="sign_in_form" class="modal-content">
         <div class="container">
           <h1>Sign Up</h1>
           <p>Please fill in this form to create an account.</p>
@@ -26,7 +26,7 @@
           <label><b>Library Name</b></label>
           <input ng-model="sign_up_library_name" type="text" placeholder="Enter Library Name" name="libraryName" required>
           <div class="clearfix">
-            <button ng-click="signUp()" class="signupbtn">Submit</button>
+            <button ng-click="sign_in_form.$valid && signUp()" class="signupbtn">Submit</button>
           </div>
           <div class="clearfix">
             <button class="otherOption" ng-click="guest()">Continue As A Guest</button>
@@ -37,7 +37,7 @@
     </div>
 
     <div ng-show="signInFlag" class="modal">
-      <form class="modal-content">
+      <form name="sign_up_form" class="modal-content">
         <div class="container">
           <h1>Sign In</h1>
           <p>Please fill in this form to sign in.</p>
@@ -47,7 +47,7 @@
           <label><b>Password</b></label>
           <input ng-model="sign_in_password" type="password" placeholder="Enter Password" name="password" required>
           <div class="clearfix">
-            <button ng-click="signIn()" class="signinbtn">Submit</button>
+            <button ng-click="sign_up_form.$valid && signIn()" class="signinbtn">Submit</button>
           </div>
           <div class="clearfix">
             <button class="otherOption" ng-click="guest()">Continue As A Guest</button>

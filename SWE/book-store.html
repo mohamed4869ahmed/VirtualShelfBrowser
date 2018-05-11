@@ -15,7 +15,7 @@
   <div ng-controller="UserController">
 
     <div ng-show="add_book_flag" class="modal">
-      <form class="modal-content">
+      <form name="form" class="modal-content">
         <div class="container">
           <h1>Hi {{username}},</h1>
           <p>Please fill in this form to add a Book.</p>
@@ -25,8 +25,8 @@
           <label><b>Price</b></label>
           <input ng-model="price" type="text" placeholder="Enter Price" required>
           <div class="clearfix">
-            <button ng-click="addBook()" class="addBook">Add Book</button>
-            <button ng-click="removeBook()" class="removeBook">Remove Book</button>
+            <button ng-click="form.$valid && addBook()" class="addBook">Add Book</button>
+            <button ng-click="form.$valid && removeBook()" class="removeBook">Remove Book</button>
           </div>
           <div class="clearfix">
             <button class="otherOption2" ng-click="guest()">Continue As A Guest</button>
